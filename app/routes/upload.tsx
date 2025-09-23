@@ -4,7 +4,7 @@ import FileUploader from "~/components/FileUploader";
 import {usePuterStore} from "~/lib/puter";
 import {useNavigate} from "react-router";
 import {convertPdfToImage} from "~/lib/pdf2img";
-import {generateUUID} from "~/lib/utils.js";
+import {generateUUID} from "~/lib/utils";
 import {prepareInstructions} from "../../constants";
 
 const Upload = () => {
@@ -46,20 +46,20 @@ const Upload = () => {
 
         setStatusText('Analyzing...');
 
-        // const feedback = await ai.feedback(
-        //     uploadedFile.path,
-        //     prepareInstructions({ jobTitle, jobDescription })
-        // )
-        // if (!feedback) return setStatusText('Error: Failed to analyze resume');
+        const feedback = await ai.feedback(
+            uploadedFile.path,
+            prepareInstructions({ jobTitle, jobDescription })
+        )
+        if (!feedback) return setStatusText('Error: Failed to analyze resume');
 
-        // const feedbackText = typeof feedback.message.content === 'string'
-        //     ? feedback.message.content
-        //     : feedback.message.content[0].text;
+        const feedbackText = typeof feedback.message.content === 'string'
+            ? feedback.message.content
+            : feedback.message.content[0].text;
 
-        // data.feedback = JSON.parse(feedbackText);
-        // await kv.set(`resume:${uuid}`, JSON.stringify(data));
-        // setStatusText('Analysis complete, redirecting...');
-        // console.log(data);
+        data.feedback = JSON.parse(feedbackText);
+        await kv.set(`resume:${uuid}`, JSON.stringify(data));
+        setStatusText('Analysis complete, redirecting...');
+        console.log(data);
         // navigate(`/resume/${uuid}`);
     }
 
